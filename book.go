@@ -80,6 +80,11 @@ func CreateBook(w http.ResponseWriter, r *http.Request) {
 
 func UpdateBook(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r) // Get params
+	var book Book
+	DB.First(&book, params["id"])
+	json.NewDecoder(r.Body).Decode(&book)
+	DB.Save(&book)
 	// params := mux.Vars(r)
 	// for index, item := range books {
 	// 	if item.ID == params["id"] {
@@ -92,11 +97,14 @@ func UpdateBook(w http.ResponseWriter, r *http.Request) {
 	// 		return
 	// 	}
 	// }
-	json.NewEncoder(w).Encode(books)
+	json.NewEncoder(w).Encode(book)
 }
 
 func DeleteBook(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	params := mux.Vars(r) // Get params
+	var book Book
+	DB.Delete(&book, params["id"])
 	// params := mux.Vars(r)
 	// for index, item := range books {
 	// 	if item.ID == params["id"] {
@@ -104,5 +112,5 @@ func DeleteBook(w http.ResponseWriter, r *http.Request) {
 	// 		break
 	// 	}
 	// }
-	json.NewEncoder(w).Encode(books)
+	json.NewEncoder(w).Encode("The user is deleted successfully")
 }
