@@ -2,8 +2,10 @@ package main
 
 import (
 	// "fmt"
+	"io"
 	"log"
 	"net/http"
+	"os"
 
 	// "math/rand"
 	"github.com/gorilla/mux"
@@ -28,9 +30,26 @@ func InitializeRouter() {
 	log.Fatal(http.ListenAndServe(":8000", r))
 }
 
+func PracticeDeferWithCopyFile(dstName, srcName string) (written int64, err error) {
+	src, err := os.Open(srcName)
+	if err != nil {
+		return
+	}
+	defer src.Close()
+
+	dst, err := os.Create(dstName)
+	if err != nil {
+		return
+	}
+	defer dst.Close()
+
+	return io.Copy(dst, src)
+}
+
 func main() {
 	// fmt.Println("Hello world")
 	InitialMigration()
 	// Init router
 	InitializeRouter()
+	PracticeDeferWithCopyFile("go-file-1.txt", "go-file-2.txt")
 }
