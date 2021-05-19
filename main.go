@@ -13,6 +13,16 @@ import (
 	"github.com/gorilla/mux"
 )
 
+type Request struct {
+	ID    float64 `json:"id"`
+	Value string  `json:"value"`
+}
+
+type Response struct {
+	Message string `json:"message"`
+	Ok      bool   `json:"ok"`
+}
+
 func InitializeRouter() {
 	r := mux.NewRouter()
 
@@ -48,14 +58,13 @@ func PracticeDeferWithCopyFile(dstName, srcName string) (written int64, err erro
 	return io.Copy(dst, src)
 }
 
-type Request struct {
-	ID    float64 `json:"id"`
-	Value string  `json:"value"`
+// Calculate function below is to run a simple test
+func Calculate(num int) int {
+	return num + 2
 }
 
-type Response struct {
-	Message string `json:"message"`
-	Ok      bool   `json:"ok"`
+func Add(x, y int) int {
+	return x + y
 }
 
 func Handler(request Request) (Response, error) {
