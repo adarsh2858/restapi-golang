@@ -1,7 +1,13 @@
+// +build unit
+
 package main
 
 import (
+	"fmt"
+	"io"
 	"io/ioutil"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 )
 
@@ -57,5 +63,24 @@ func TestFileData(t *testing.T) {
 
 	if string(data) != "Lorem ipsum dolor sit amet\n" {
 		t.Fatal("The expected value did not match the file contents.")
+	}
+}
+
+func TestHttpRequests(t *testing.T) {
+	handler := func(w http.ResponseWriter, r *http.Request) {
+		io.WriteString(w, "{ \"status\":\"good\" }")
+	}
+
+	req := httptest.NewRequest("GET", "https://tutorialedge.net", nil)
+	w := httptest.NewRecorder()
+	handler(w, req)
+
+	resp := w.Result()
+	body, _ := ioutil.ReadAll(resp.Body)
+
+	fmt.Println(string(body))
+
+	if 200 != resp.StatusCode {
+		t.Fatal("Status Code not OK")
 	}
 }
