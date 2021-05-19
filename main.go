@@ -2,12 +2,14 @@ package main
 
 import (
 	// "fmt"
+	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"os"
 
 	// "math/rand"
+	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/gorilla/mux"
 )
 
@@ -46,10 +48,28 @@ func PracticeDeferWithCopyFile(dstName, srcName string) (written int64, err erro
 	return io.Copy(dst, src)
 }
 
+type Request struct {
+	ID    float64 `json:"id"`
+	Value string  `json:"value"`
+}
+
+type Response struct {
+	Message string `json:"message"`
+	Ok      bool   `json:"ok"`
+}
+
+func Handler(request Request) (Response, error) {
+	return Response{
+		Message: fmt.Sprintf("Process Request ID %f", request.ID),
+		Ok:      true,
+	}, nil
+}
+
 func main() {
-	// fmt.Println("Hello world")
-	InitialMigration()
+	// RESTAPI implementation calls
+	// InitialMigration()
 	// Init router
-	InitializeRouter()
-	PracticeDeferWithCopyFile("go-file-1.txt", "go-file-2.txt")
+	// InitializeRouter()
+	// PracticeDeferWithCopyFile("go-file-1.txt", "go-file-2.txt")
+	lambda.Start(Handler)
 }
