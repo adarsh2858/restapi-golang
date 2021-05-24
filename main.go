@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math"
 	"net/http"
 	"os"
 
@@ -123,6 +124,12 @@ func connectToDB() {
 	fmt.Println("Successfully fetch the element")
 }
 
+func calc(x, y float64) (sum, difference float64) {
+	sum = x + y
+	difference = math.Abs(x - y)
+	return
+}
+
 func main() {
 	// RESTAPI implementation calls
 	// InitialMigration()
@@ -130,5 +137,7 @@ func main() {
 	// InitializeRouter()
 	// PracticeDeferWithCopyFile("go-file-1.txt", "go-file-2.txt")
 	// lambda.Start(Handler)
-	connectToDB()
+	// connectToDB()
+	res1, res2 := calc(1.1, 2.2)
+	fmt.Printf("%.2f %.2f", res1, res2)
 }
